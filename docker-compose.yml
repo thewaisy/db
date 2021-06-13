@@ -1,0 +1,72 @@
+version: '3.9'
+networks:
+  data:
+    external:
+      name: waisy
+
+services:
+  mysql_5:
+    container_name: mysql_5
+    hostname: mysql_5
+    image: mysql:5.7
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./db/mysql5:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - data
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+      - --skip-grant-tables
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+    restart: always
+
+  mysql_8:
+    container_name: mysql_8
+    hostname: mysql_8
+    image: mysql:8.0
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./db/mysql8:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - data
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+#      - --skip-grant-tables
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+    restart: always
+
+  postgres_12:
+    container_name: postgres_12
+    hostname: postgres_12
+    image: postgres:12.6-alpine
+    ports:
+      - "5432:5432"
+    networks:
+      - data
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./db/postgres_12:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: "test"
+      TZ: Asia/Seoul
